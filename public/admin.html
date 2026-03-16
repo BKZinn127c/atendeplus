@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel Admin - Atende+</title>
+
+<style>
+
+body{
+background:#020b28;
+font-family:Arial;
+color:white;
+margin:0;
+}
+
+.topbar{
+background:#04113a;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.container{
+padding:30px;
+max-width:1100px;
+margin:auto;
+}
+
+.card{
+background:#071a56;
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+button{
+padding:10px 16px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.btn{
+background:#1f9d55;
+color:white;
+}
+
+.btn-danger{
+background:#c62828;
+color:white;
+}
+
+.table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+.table th{
+background:#0e2a80;
+padding:10px;
+}
+
+.table td{
+padding:10px;
+border-bottom:1px solid #1a3c9c;
+text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="topbar">
+
+<h2>Atende+ Admin</h2>
+
+<button onclick="logout()" class="btn-danger">
+Sair
+</button>
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h3>Empresas cadastradas</h3>
+
+<table class="table">
+
+<thead>
+
+<tr>
+<th>Empresa</th>
+<th>Dono</th>
+<th>Email</th>
+<th>Status</th>
+<th>WhatsApp</th>
+</tr>
+
+</thead>
+
+<tbody id="empresas">
+
+<tr>
+<td colspan="5">Carregando...</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+async function carregarEmpresas(){
+
+const res = await fetch("/api/admin/empresas");
+
+if(!res.ok){
+
+alert("Erro ao carregar empresas");
+
+return;
+
+}
+
+const data = await res.json();
+
+const tabela = document.getElementById("empresas");
+
+tabela.innerHTML="";
+
+if(!data.empresas.length){
+
+tabela.innerHTML="<tr><td colspan='5'>Nenhuma empresa cadastrada</td></tr>";
+
+return;
+
+}
+
+data.empresas.forEach(emp =>{
+
+const tr = document.createElement("tr");
+
+tr.innerHTML=`
+
+<td>${emp.nome}</td>
+<td>${emp.dono?.nome || "-"}</td>
+<td>${emp.dono?.email || "-"}</td>
+<td>${emp.status}</td>
+<td>${emp.sessaoWhatsapp?.status || "desconectado"}</td>
+
+`;
+
+tabela.appendChild(tr);
+
+});
+
+}
+
+async function logout(){
+
+await fetch("/api/auth/logout",{method:"POST"});
+
+window.location.href="/login.html";
+
+}
+
+carregarEmpresas();
+
+</script>
+
+</body>
+</html>

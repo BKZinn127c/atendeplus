@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel do Cliente | Atende+</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(19,168,255,.12), transparent 25%),
+        linear-gradient(180deg, #020b28, #04113a 45%, #071a56);
+      color: white;
+      min-height: 100vh;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      background: rgba(5, 18, 57, 0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      z-index: 10;
+    }
+    .topbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+    }
+    .btn-logout { background: #c62828; }
+    .btn-connect { background: linear-gradient(135deg, #9af31d, #22d1ff); color: #04113a; }
+    .btn-gray { background: #3e5a9a; }
+    .btn-green { background: #1f9d55; }
+    .btn-danger { background: #d32f2f; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: rgba(10, 28, 89, 0.88);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    }
+
+    .card.full {
+      grid-column: 1 / -1;
+    }
+
+    .card h2, .card h3 {
+      margin-top: 0;
+    }
+
+    .muted {
+      color: #bdd6ff;
+      line-height: 1.7;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #d8e8ff;
+    }
+
+    .field input, .field textarea, .field select {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      background: #17306f;
+      color: white;
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .field input:focus, .field textarea:focus, .field select:focus {
+      box-shadow: 0 0 0 2px rgba(19,168,255,.4);
+    }
+
+    .status {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: bold;
+      margin-top: 10px;
+      background: rgba(255,255,255,.08);
+    }
+
+    .qr-box {
+      margin-top: 16px;
+      text-align: center;
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .qr-box img {
+      max-width: 280px;
+      width: 100%;
+      border-radius: 14px;
+      background: white;
+      padding: 8px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .mini-item {
+      background: rgba(255,255,255,.04);
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .msg {
+      min-height: 20px;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #b9ffb9;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Atende+ • Painel do Cliente</div>
+      <button class="btn btn-logout" onclick="logout()">Sair</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="grid">
+      <div class="card">
+        <h2 id="empresaNome">Carregando empresa...</h2>
+        <div class="muted" id="empresaInfo">Carregando informações...</div>
+      </div>
+
+      <div class="card">
+        <h2>Conexão do WhatsApp</h2>
+        <div class="muted">
+          Clique em iniciar, aguarde o QR Code e escaneie com o WhatsApp da sua empresa.
+        </div>
+
+        <div class="status" id="statusWhatsapp">Status: carregando...</div>
+
+        <div class="actions">
+          <button class="btn btn-connect" onclick="iniciarWhatsapp()">Iniciar conexão</button>
+          <button class="btn btn-gray" onclick="atualizarStatus()">Atualizar status</button>
+          <button class="btn btn-danger" onclick="desconectarWhatsapp()">Desconectar</button>
+        </div>
+
+        <div class="qr-box" id="qrBox" style="display:none;">
+          <h3>Escaneie o QR Code</h3>
+          <img id="qrImg" src="" alt="QR Code WhatsApp" />
+        </div>
+      </div>
+
+      <div class="card full">
+        <h2>Configurações da empresa</h2>
+
+        <div class="grid">
+          <div class="field">
+            <label>Nome da empresa</label>
+            <input type="text" id="cfgNome" />
+          </div>
+          <div class="field">
+            <label>Nicho</label>
+            <input type="text" id="cfgNicho" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Telefone</label>
+          <input type="text" id="cfgTelefone" />
+        </div>
+
+        <h3>Configuração da IA</h3>
+
+        <div class="grid">
+          <div class="field">
+            <label>Tom da IA</label>
+            <input type="text" id="cfgTom" placeholder="Ex: profissional e amigável" />
+          </div>
+          <div class="field">
+            <label>Personalidade</label>
+            <input type="text" id="cfgPersonalidade" placeholder="Ex: comercial" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Objetivo da IA</label>
+          <input type="text" id="cfgObjetivo" placeholder="Ex: converter clientes em vendas" />
+        </div>
+
+        <h3>Mensagens automáticas</h3>
+
+        <div class="field">
+          <label>Mensagem de boas-vindas</label>
+          <textarea id="cfgBoasVindas"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Mensagem de atendente</label>
+          <textarea id="cfgAtendente"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Mensagem PIX</label>
+          <textarea id="cfgPix"></textarea>
+        </div>
+
+        <button class="btn btn-green" onclick="salvarConfiguracoes()">Salvar configurações</button>
+        <div class="msg" id="cfgMsg"></div>
+      </div>
+
+      <div class="card">
+        <h2>Planos / Serviços</h2>
+
+        <div class="field">
+          <label>Nome</label>
+          <input type="text" id="planoNome" placeholder="Ex: Plano Mensal" />
+        </div>
+
+        <div class="field">
+          <label>Valor</label>
+          <input type="text" id="planoValor" placeholder="Ex: R$ 30,00" />
+        </div>
+
+        <div class="field">
+          <label>Descrição</label>
+          <textarea id="planoDescricao" placeholder="Ex: Acesso completo por 30 dias"></textarea>
+        </div>
+
+        <button class="btn btn-green" onclick="adicionarPlano()">Adicionar plano</button>
+
+        <div class="mini-list" id="listaPlanos"></div>
+      </div>
+
+      <div class="card">
+        <h2>Perguntas frequentes (FAQ)</h2>
+
+        <div class="field">
+          <label>Pergunta</label>
+          <input type="text" id="faqPergunta" placeholder="Ex: Tem teste?" />
+        </div>
+
+        <div class="field">
+          <label>Resposta</label>
+          <textarea id="faqResposta" placeholder="Ex: Sim, oferecemos teste grátis de 24h."></textarea>
+        </div>
+
+        <button class="btn btn-green" onclick="adicionarFAQ()">Adicionar FAQ</button>
+
+        <div class="mini-list" id="listaFAQ"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let empresaAtual = null;
+    let planos = [];
+    let faq = [];
+
+    async function verificarSessao() {
+      const res = await fetch("/api/session");
+      if (!res.ok) {
+        window.location.href = "/login.html";
+        return null;
+      }
+      const data = await res.json();
+      return data.user;
+    }
+
+    async function carregarEmpresa() {
+      const user = await verificarSessao();
+      if (!user) return;
+
+      const res = await fetch("/api/cliente/empresa");
+      const data = await res.json();
+
+      if (!data.ok) {
+        alert(data.message || "Erro ao carregar empresa.");
+        return;
+      }
+
+      empresaAtual = data.empresa;
+
+      document.getElementById("empresaNome").textContent = data.empresa.nome;
+      document.getElementById("empresaInfo").innerHTML = `
+        Empresa ativa no Atende+.<br>
+        Configure sua IA, mensagens, planos e conecte o WhatsApp.
+      `;
+
+      document.getElementById("cfgNome").value = data.empresa.nome || "";
+      document.getElementById("cfgNicho").value = data.empresa.nicho || "";
+      document.getElementById("cfgTelefone").value = data.empresa.telefone || "";
+
+      document.getElementById("cfgTom").value = data.empresa.ia?.tom || "";
+      document.getElementById("cfgPersonalidade").value = data.empresa.ia?.personalidade || "";
+      document.getElementById("cfgObjetivo").value = data.empresa.ia?.objetivo || "";
+
+      document.getElementById("cfgBoasVindas").value = data.empresa.mensagens?.boasVindas || "";
+      document.getElementById("cfgAtendente").value = data.empresa.mensagens?.atendente || "";
+      document.getElementById("cfgPix").value = data.empresa.mensagens?.pix || "";
+
+      if (data.sessaoWhatsapp) {
+        renderStatus(data.sessaoWhatsapp);
+      }
+
+      carregarPlanos();
+      carregarFAQ();
+    }
+
+    function renderStatus(sessao) {
+      document.getElementById("statusWhatsapp").textContent = `Status: ${sessao.status || "desconhecido"}`;
+
+      if (sessao.qr) {
+        document.getElementById("qrBox").style.display = "block";
+        document.getElementById("qrImg").src = sessao.qr;
+      } else {
+        document.getElementById("qrBox").style.display = "none";
+        document.getElementById("qrImg").src = "";
+      }
+    }
+
+    async function iniciarWhatsapp() {
+      const res = await fetch("/api/cliente/whatsapp/iniciar", {
+        method: "POST"
+      });
+
+      const data = await res.json();
+
+      if (!data.ok) {
+        alert(data.message || "Erro ao iniciar WhatsApp.");
+        return;
+      }
+
+      alert("Inicialização enviada. Aguarde alguns segundos e clique em Atualizar status.");
+      setTimeout(atualizarStatus, 3000);
+    }
+
+    async function atualizarStatus() {
+      const res = await fetch("/api/cliente/whatsapp/status");
+      const data = await res.json();
+
+      if (!data.ok) {
+        alert(data.message || "Erro ao buscar status.");
+        return;
+      }
+
+      renderStatus(data.sessao);
+
+      const qrRes = await fetch("/api/cliente/whatsapp/qr");
+      const qrData = await qrRes.json();
+
+      if (qrData.ok) {
+        renderStatus(qrData);
+      }
+    }
+
+    async function desconectarWhatsapp() {
+      const confirmar = confirm("Deseja desconectar o WhatsApp da empresa?");
+      if (!confirmar) return;
+
+      const res = await fetch("/api/cliente/whatsapp/desconectar", {
+        method: "POST"
+      });
+
+      const data = await res.json();
+
+      if (data.ok) {
+        alert("WhatsApp desconectado.");
+        atualizarStatus();
+      } else {
+        alert(data.message || "Erro ao desconectar.");
+      }
+    }
+
+    async function salvarConfiguracoes() {
+      const body = {
+        nome: document.getElementById("cfgNome").value.trim(),
+        nicho: document.getElementById("cfgNicho").value.trim(),
+        telefone: document.getElementById("cfgTelefone").value.trim(),
+        ia: {
+          tom: document.getElementById("cfgTom").value.trim(),
+          personalidade: document.getElementById("cfgPersonalidade").value.trim(),
+          objetivo: document.getElementById("cfgObjetivo").value.trim()
+        },
+        mensagens: {
+          boasVindas: document.getElementById("cfgBoasVindas").value.trim(),
+          atendente: document.getElementById("cfgAtendente").value.trim(),
+          pix: document.getElementById("cfgPix").value.trim()
+        }
+      };
+
+      const res = await fetch("/api/cliente/empresa", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      const data = await res.json();
+
+      const msg = document.getElementById("cfgMsg");
+
+      if (data.ok) {
+        msg.textContent = "Configurações salvas com sucesso.";
+        carregarEmpresa();
+      } else {
+        msg.style.color = "#ffb3b3";
+        msg.textContent = data.message || "Erro ao salvar configurações.";
+      }
+    }
+
+    async function carregarPlanos() {
+      const res = await fetch("/api/cliente/planos");
+      const data = await res.json();
+
+      if (data.ok) {
+        planos = data.planos || [];
+        renderPlanos();
+      }
+    }
+
+    function renderPlanos() {
+      const lista = document.getElementById("listaPlanos");
+      lista.innerHTML = "";
+
+      if (!planos.length) {
+        lista.innerHTML = "<div class='mini-item'>Nenhum plano cadastrado.</div>";
+        return;
+      }
+
+      planos.forEach((plano) => {
+        const div = document.createElement("div");
+        div.className = "mini-item";
+        div.innerHTML = `
+          <strong>${plano.nome}</strong><br>
+          <span>${plano.valor}</span><br>
+          <span class="muted">${plano.descricao || ""}</span>
+          <div class="actions">
+            <button class="btn btn-danger" onclick="excluirPlano('${plano.id}')">Excluir</button>
+          </div>
+        `;
+        lista.appendChild(div);
+      });
+    }
+
+    async function adicionarPlano() {
+      const body = {
+        nome: document.getElementById("planoNome").value.trim(),
+        valor: document.getElementById("planoValor").value.trim(),
+        descricao: document.getElementById("planoDescricao").value.trim()
+      };
+
+      if (!body.nome || !body.valor) {
+        alert("Nome e valor são obrigatórios.");
+        return;
+      }
+
+      const res = await fetch("/api/cliente/planos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      const data = await res.json();
+
+      if (data.ok) {
+        document.getElementById("planoNome").value = "";
+        document.getElementById("planoValor").value = "";
+        document.getElementById("planoDescricao").value = "";
+        carregarPlanos();
+      } else {
+        alert(data.message || "Erro ao adicionar plano.");
+      }
+    }
+
+    async function excluirPlano(id) {
+      const confirmar = confirm("Deseja excluir este plano?");
+      if (!confirmar) return;
+
+      const res = await fetch(`/api/cliente/planos/${id}`, {
+        method: "DELETE"
+      });
+
+      const data = await res.json();
+
+      if (data.ok) {
+        carregarPlanos();
+      } else {
+        alert(data.message || "Erro ao excluir plano.");
+      }
+    }
+
+    async function carregarFAQ() {
+      const res = await fetch("/api/cliente/faq");
+      const data = await res.json();
+
+      if (data.ok) {
+        faq = data.faq || [];
+        renderFAQ();
+      }
+    }
+
+    function renderFAQ() {
+      const lista = document.getElementById("listaFAQ");
+      lista.innerHTML = "";
+
+      if (!faq.length) {
+        lista.innerHTML = "<div class='mini-item'>Nenhuma pergunta cadastrada.</div>";
+        return;
+      }
+
+      faq.forEach((item) => {
+        const div = document.createElement("div");
+        div.className = "mini-item";
+        div.innerHTML = `
+          <strong>${item.pergunta}</strong><br>
+          <span class="muted">${item.resposta}</span>
+          <div class="actions">
+            <button class="btn btn-danger" onclick="excluirFAQ('${item.id}')">Excluir</button>
+          </div>
+        `;
+        lista.appendChild(div);
+      });
+    }
+
+    async function adicionarFAQ() {
+      const body = {
+        pergunta: document.getElementById("faqPergunta").value.trim(),
+        resposta: document.getElementById("faqResposta").value.trim()
+      };
+
+      if (!body.pergunta || !body.resposta) {
+        alert("Pergunta e resposta são obrigatórias.");
+        return;
+      }
+
+      const res = await fetch("/api/cliente/faq", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      const data = await res.json();
+
+      if (data.ok) {
+        document.getElementById("faqPergunta").value = "";
+        document.getElementById("faqResposta").value = "";
+        carregarFAQ();
+      } else {
+        alert(data.message || "Erro ao adicionar FAQ.");
+      }
+    }
+
+    async function excluirFAQ(id) {
+      const confirmar = confirm("Deseja excluir esta FAQ?");
+      if (!confirmar) return;
+
+      const res = await fetch(`/api/cliente/faq/${id}`, {
+        method: "DELETE"
+      });
+
+      const data = await res.json();
+
+      if (data.ok) {
+        carregarFAQ();
+      } else {
+        alert(data.message || "Erro ao excluir FAQ.");
+      }
+    }
+
+    async function logout() {
+      await fetch("/api/auth/logout", { method: "POST" });
+      window.location.href = "/login.html";
+    }
+
+    carregarEmpresa();
+    setInterval(atualizarStatus, 5000);
+  </script>
+</body>
+</html>

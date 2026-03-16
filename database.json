@@ -1,0 +1,81 @@
+{
+  "empresa": "KingTV",
+  "testeGratisAtivo": true,
+  "mensagemBoasVindas": "👑 Olá, seja bem-vindo(a) à *KingTV*! 📺🔥\n\nA sua nova experiência em entretenimento começa aqui.\n\nTemos opções para você assistir *onde quiser*, com praticidade e qualidade.\n\nDigite uma opção para continuar:\n\n*1*️⃣ Ver planos  \n*2*️⃣ Ver valores  \n*3*️⃣ Pedir teste grátis  \n*4*️⃣ Falar com atendente  \n*5*️⃣ Assinar agora  \n*6*️⃣ Receber o PIX",
+  "mensagemAtendente": "Perfeito! Um atendente vai falar com você em instantes.",
+  "mensagemTeste": "Ótimo! Vamos liberar seu teste grátis.\n\nPrimeiro, me envie seu *nome*.",
+  "mensagemTesteAparelho": "Perfeito! Agora me envie o *nome do aparelho* que você vai usar.\n\nExemplo: TV Box MXQ, Smart TV Samsung, Celular Android, iPhone...",
+  "mensagemTesteConcluido": "Cadastro do teste grátis realizado com sucesso ✅\n\nUm atendente da KingTV vai analisar e liberar seu acesso o mais rápido possível.",
+  "mensagemAssinatura": "Perfeito! Para contratar sua assinatura, me envie seu *nome*.",
+  "mensagemAssinaturaPlano": "Agora me diga qual plano você deseja.\n\nExemplo:\nPlano Mensal\nPlano Trimestral",
+  "mensagemAssinaturaAparelho": "Agora me envie o *aparelho* que você vai usar.\n\nExemplo: TV Box, Smart TV LG, Smart TV Samsung, Android, iPhone...",
+  "mensagemAssinaturaConcluida": "Perfeito ✅\n\nSeu pedido de assinatura foi registrado com sucesso. Agora envie o comprovante após o pagamento para agilizar sua liberação.",
+  "mensagemPix": "💳 *PIX KingTV*\n\nChave PIX: 06676299399\n\nApós o pagamento, envie o comprovante neste número para agilizar sua liberação.",
+  "painelLogin": {
+    "usuario": "kingtv",
+    "senha": "1361175562"
+  },
+  "planos": [
+    {
+      "id": 1,
+      "nome": "Plano Mensal",
+      "valor": "R$ 30,00",
+      "descricao": "Acesso completo por 30 dias"
+    }
+  ],
+  "leads": [
+    {
+      "id": 3,
+      "numero": "238998186405953@lid",
+      "nome": "",
+      "aparelho": "",
+      "plano": "",
+      "tipo": "atendente",
+      "observacao": "Solicitou atendimento humano pelo WhatsApp",
+      "status": "novo",
+      "criadoEm": "15/03/2026, 19:58:01",
+      "atualizadoEm": "15/03/2026, 19:58:01"
+    },
+    {
+      "id": 2,
+      "numero": "238998186405953@lid",
+      "nome": "eliezer",
+      "aparelho": "tv box",
+      "plano": "",
+      "tipo": "teste",
+      "observacao": "Solicitou teste grátis pelo WhatsApp",
+      "status": "novo",
+      "criadoEm": "15/03/2026, 19:20:03",
+      "atualizadoEm": "15/03/2026, 19:20:03"
+    },
+    {
+      "id": 1,
+      "numero": "238998186405953@lid",
+      "nome": "eliezer",
+      "aparelho": "box",
+      "plano": "mensal",
+      "tipo": "assinatura",
+      "observacao": "Solicitou assinatura pelo WhatsApp",
+      "status": "novo",
+      "criadoEm": "15/03/2026, 18:47:39",
+      "atualizadoEm": "15/03/2026, 19:24:30"
+    }
+  ],
+  "atendimentos": {
+    "238998186405953@lid": {
+      "historicoIA": [
+        {
+          "role": "user",
+          "content": "ola, funciona na tv samsung smart?",
+          "em": "2026-03-15T23:19:01.489Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Oi! Geralmente funciona em várias smart TVs, mas para garantir, o ideal é testar grátis e ver se roda direitinho na sua Samsung. Quer que eu te ajude a começar o teste grátis?",
+          "em": "2026-03-15T23:19:01.491Z"
+        }
+      ],
+      "memoriaAtualizadaEm": "2026-03-15T23:19:01.491Z"
+    }
+  }
+}

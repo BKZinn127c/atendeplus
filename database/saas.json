@@ -1,0 +1,9 @@
+{
+  "superAdmin": {
+    "email": "admin@atendeplus.com",
+    "senhaHash": "$2b$10$wA9m6D1v8c2z8Qh1cJQW4.Z4jQ2NqG6C0j3s7r5v5l8P9Gm0J2xjK"
+  },
+  "usuarios": [],
+  "empresas": [],
+  "sessoesWhatsapp": []
+}

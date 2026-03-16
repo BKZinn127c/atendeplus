@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Atende+</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(19,168,255,.18), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(154,243,29,.12), transparent 25%),
+        linear-gradient(135deg, #020b28, #04113a 45%, #071a56);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .box {
+      width: 100%;
+      max-width: 430px;
+      background: rgba(10, 22, 65, 0.92);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.35);
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      text-align: center;
+    }
+    p {
+      margin: 0 0 20px;
+      color: #bdd6ff;
+      text-align: center;
+      line-height: 1.6;
+    }
+    .field { margin-bottom: 12px; }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #d8e8ff;
+    }
+    input {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      background: #17306f;
+      color: white;
+      outline: none;
+    }
+    input:focus {
+      box-shadow: 0 0 0 2px rgba(19,168,255,.4);
+    }
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 15px;
+      font-weight: bold;
+      color: #04113a;
+      cursor: pointer;
+      background: linear-gradient(135deg, #9af31d, #22d1ff);
+      margin-top: 8px;
+    }
+    .msg {
+      min-height: 22px;
+      margin-top: 14px;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      color: #ffb3b3;
+    }
+    .footer {
+      margin-top: 18px;
+      text-align: center;
+      color: #bdd6ff;
+      font-size: 14px;
+    }
+    .footer a {
+      color: #9af31d;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Entrar no Atende+</h1>
+    <p>Acesse o painel da sua empresa ou a administração do sistema.</p>
+
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Seu email" />
+    </div>
+
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" id="senha" placeholder="Sua senha" />
+    </div>
+
+    <button onclick="login()">Entrar</button>
+    <div class="msg" id="msg"></div>
+
+    <div class="footer">
+      Ainda não tem conta? <a href="/cadastro.html">Criar agora</a>
+    </div>
+  </div>
+
+  <script>
+    async function login() {
+      const body = {
+        email: document.getElementById("email").value.trim(),
+        senha: document.getElementById("senha").value.trim()
+      };
+
+      const msg = document.getElementById("msg");
+      msg.textContent = "";
+
+      if (!body.email || !body.senha) {
+        msg.textContent = "Preencha email e senha.";
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+          if (data.user.tipo === "super_admin") {
+            window.location.href = "/admin.html";
+          } else {
+            window.location.href = "/cliente.html";
+          }
+        } else {
+          msg.textContent = data.message || "Erro no login.";
+        }
+      } catch (error) {
+        msg.textContent = "Erro ao fazer login.";
+      }
+    }
+
+    document.getElementById("senha").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") login();
+    });
+
+    document.getElementById("email").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") login();
+    });
+  </script>
+</body>
+</html>

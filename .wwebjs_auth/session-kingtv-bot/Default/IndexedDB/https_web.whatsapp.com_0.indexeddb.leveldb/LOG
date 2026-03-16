@@ -1,0 +1,33 @@
+2026/03/15-21:30:46.178 96c Reusing MANIFEST C:\Users\ELIEZER\Desktop\bot-simples\kingtv-whatsapp-bot\.wwebjs_auth\session-kingtv-bot\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/03/15-21:30:46.192 96c Recovering log #1854
+2026/03/15-21:30:46.259 96c Reusing old log C:\Users\ELIEZER\Desktop\bot-simples\kingtv-whatsapp-bot\.wwebjs_auth\session-kingtv-bot\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/001854.log 
+2026/03/15-21:34:33.070 96c Level-0 table #1904: started
+2026/03/15-21:34:33.115 96c Level-0 table #1904: 1428898 bytes OK
+2026/03/15-21:34:33.118 96c Delete type=0 #1854
+2026/03/15-21:35:56.254 96c Compacting 1@0 + 0@1 files
+2026/03/15-21:35:56.288 96c Generated table #1905@0: 24122 keys, 552116 bytes
+2026/03/15-21:35:56.291 96c Generated table #1906@0: 49 keys, 50523 bytes
+2026/03/15-21:35:56.295 96c Generated table #1907@0: 526 keys, 146754 bytes
+2026/03/15-21:35:56.298 96c Generated table #1908@0: 1415 keys, 39081 bytes
+2026/03/15-21:35:56.298 96c Compacted 1@0 + 0@1 files => 788474 bytes
+2026/03/15-21:35:56.299 96c compacted to: files[ 0 4 42 0 0 0 0 ]
+2026/03/15-21:35:56.300 96c Delete type=2 #1904
+2026/03/15-21:38:22.461 96c Compacting 1@1 + 7@2 files
+2026/03/15-21:38:22.603 96c Generated table #1909@1: 66638 keys, 2257833 bytes
+2026/03/15-21:38:22.691 96c Generated table #1910@1: 17543 keys, 2169717 bytes
+2026/03/15-21:38:22.759 96c Generated table #1911@1: 2175 keys, 2147054 bytes
+2026/03/15-21:38:22.793 96c Generated table #1912@1: 1636 keys, 2143217 bytes
+2026/03/15-21:38:22.821 96c Generated table #1913@1: 1401 keys, 2136649 bytes
+2026/03/15-21:38:22.847 96c Generated table #1914@1: 1424 keys, 2138325 bytes
+2026/03/15-21:38:22.879 96c Generated table #1915@1: 1737 keys, 2152342 bytes
+2026/03/15-21:38:22.884 96c Generated table #1916@1: 165 keys, 202013 bytes
+2026/03/15-21:38:22.884 96c Compacted 1@1 + 7@2 files => 15347150 bytes
+2026/03/15-21:38:22.885 96c compacted to: files[ 0 3 43 0 0 0 0 ]
+2026/03/15-21:38:22.885 96c Delete type=2 #1860
+2026/03/15-21:38:22.886 96c Delete type=2 #1861
+2026/03/15-21:38:22.886 96c Delete type=2 #1862
+2026/03/15-21:38:22.886 96c Delete type=2 #1863
+2026/03/15-21:38:22.886 96c Delete type=2 #1864
+2026/03/15-21:38:22.886 96c Delete type=2 #1865
+2026/03/15-21:38:22.886 96c Delete type=2 #1866
+2026/03/15-21:38:22.886 96c Delete type=2 #1905
